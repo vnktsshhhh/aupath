@@ -18,7 +18,7 @@ async function chat(
       Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       "Content-Type": "application/json",
       "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-      "X-Title": "AuPath - Australian Job Assistant",
+      "X-Title": "Yuki AI - Australian Job Assistant",
     },
     body: JSON.stringify({ model, messages, max_tokens: maxTokens }),
   });

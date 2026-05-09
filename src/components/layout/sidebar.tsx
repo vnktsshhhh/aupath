@@ -44,7 +44,7 @@ export function Sidebar() {
             <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center font-bold text-sm">
               AU
             </div>
-            <span className="font-bold text-lg tracking-tight">AuPath</span>
+            <span className="font-bold text-lg tracking-tight">Yuki AI</span>
           </Link>
         )}
         {collapsed && (

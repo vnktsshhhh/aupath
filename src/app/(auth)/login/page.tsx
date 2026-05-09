@@ -19,7 +19,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 bg-navy-700 rounded-xl flex items-center justify-center">
               <span className="text-white font-bold text-sm">AU</span>
             </div>
-            <span className="font-bold text-navy-700 text-xl">AuPath</span>
+            <span className="font-bold text-navy-700 text-xl">Yuki AI</span>
           </Link>
           <h1 className="mt-6 text-2xl font-bold text-gray-900">Welcome back</h1>
           <p className="text-sm text-gray-500 mt-1">

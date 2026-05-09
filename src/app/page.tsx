@@ -59,7 +59,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 bg-navy-700 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xs">AU</span>
             </div>
-            <span className="font-bold text-navy-700 text-lg">AuPath</span>
+            <span className="font-bold text-navy-700 text-lg">Yuki AI</span>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -134,7 +134,7 @@ export default function LandingPage() {
               Everything you need to land your next role
             </h2>
             <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-              AuPath combines smart AI tools with Australian market knowledge to
+              Yuki AI combines smart AI tools with Australian market knowledge to
               give you a real edge.
             </p>
           </div>
@@ -200,7 +200,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="py-8 px-4 bg-navy-900 text-center text-navy-400 text-sm">
-        <p>© 2025 AuPath · For demonstration purposes only · Not affiliated with any employer</p>
+        <p>© 2025 Yuki AI · For demonstration purposes only · Not affiliated with any employer</p>
       </footer>
     </div>
   );

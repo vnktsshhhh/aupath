@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "AuPath – Australian AI Job Assistant", template: "%s | AuPath" },
+  title: { default: "Yuki AI – Australian AI Job Assistant", template: "%s | Yuki AI" },
   description:
     "Find your next role in Australia with AI-powered job matching, tailored cover letters, and smart career tracking.",
 };
