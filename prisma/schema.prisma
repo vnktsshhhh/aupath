@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String   @id @default(uuid())
+  supabaseId String   @unique
+  email      String   @unique
+  name       String?
+  isAdmin    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  profile      Profile?
+  resumes      Resume[]
+  savedJobs    SavedJob[]
+  applications JobApplication[]
+}
+
+model Profile {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline           String?
+  summary            String?  @db.Text
+  location           String?
+  state              String?
+  workRights         String?
+  skills             String[]
+  yearsExperience    Int?
+  preferredJobTypes  String[]
+  preferredLocations String[]
+  minSalaryAud       Int?
+  linkedinUrl        String?
+  portfolioUrl       String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  experiences Experience[]
+  education   Education[]
+}
+
+model Experience {
+  id          String    @id @default(uuid())
+  profileId   String
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  company     String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  isCurrent   Boolean   @default(false)
+  description String?   @db.Text
+}
+
+model Education {
+  id          String  @id @default(uuid())
+  profileId   String
+  profile     Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  institution String
+  degree      String
+  field       String?
+  startYear   Int
+  endYear     Int?
+  isCurrent   Boolean @default(false)
+}
+
+model Resume {
+  id            String   @id @default(uuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fileName      String
+  fileUrl       String
+  fileType      String
+  extractedText String?  @db.Text
+  parsedData    Json?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  website     String?
+  logoUrl     String?
+  industry    String?
+  size        String?
+  location    String?
+  state       String?
+  createdAt   DateTime @default(now())
+
+  jobs Job[]
+}
+
+model Job {
+  id               String    @id @default(uuid())
+  title            String
+  companyId        String
+  company          Company   @relation(fields: [companyId], references: [id])
+  description      String    @db.Text
+  requirements     String[]
+  responsibilities String[]
+  skills           String[]
+  location         String
+  state            String
+  workType         String
+  employmentType   String
+  salaryMin        Int?
+  salaryMax        Int?
+  salaryCurrency   String    @default("AUD")
+  visaSponsorship  Boolean   @default(false)
+  workRights       String[]
+  industry         String?
+  experienceLevel  String?
+  isActive         Boolean   @default(true)
+  isFeatured       Boolean   @default(false)
+  postedAt         DateTime  @default(now())
+  expiresAt        DateTime?
+  slug             String    @unique
+
+  savedBy      SavedJob[]
+  applications JobApplication[]
+}
+
+model SavedJob {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, jobId])
+}
+
+model JobApplication {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId       String?
+  job         Job?      @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  companyName String?
+  jobTitle    String
+  status      String    @default("wishlist")
+  appliedAt   DateTime?
+  notes       String?   @db.Text
+  coverLetter String?   @db.Text
+  fitScore    Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

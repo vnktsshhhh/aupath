@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: ["pdf-parse", "mammoth"],
+  images: {
+    remotePatterns: [
+      { hostname: "*.supabase.co" },
+      { hostname: "logo.clearbit.com" },
+    ],
+  },
 };
 
 export default nextConfig;
