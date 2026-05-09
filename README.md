@@ -1,4 +1,4 @@
-# AuPath – Australian AI Job Assistant
+# Yuki AI – Australian AI Job Assistant
 
 An AI-powered job search platform built for the Australian market. Upload your resume, get AI job matching, generate tailored cover letters, and track every application.
 
