@@ -17,11 +17,8 @@ export async function extractTextFromFile(
 }
 
 async function extractFromPdf(buffer: Buffer): Promise<string> {
-  // pdf-parse v2 uses named exports
-  const pdfModule = await import("pdf-parse");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pdfParse: (buf: Buffer) => Promise<{ text: string }> =
-    (pdfModule as any).default ?? (pdfModule as any);
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfParse = require("pdf-parse") as (buf: Buffer) => Promise<{ text: string }>;
   const result = await pdfParse(buffer);
   return result.text.trim();
 }
