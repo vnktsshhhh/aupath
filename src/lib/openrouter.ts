@@ -1,6 +1,6 @@
 const OPENROUTER_BASE = "https://openrouter.ai/api/v1";
-const DEFAULT_MODEL = "anthropic/claude-3-haiku";
-const SMART_MODEL = "anthropic/claude-3.5-sonnet";
+const DEFAULT_MODEL = "openrouter/free";
+const SMART_MODEL = "openrouter/free";
 
 interface ChatMessage {
   role: "system" | "user" | "assistant";
