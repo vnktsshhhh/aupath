@@ -49,7 +49,7 @@ export async function extractProfileFromResume(resumeText: string) {
   "summary": string (2-3 sentences),
   "skills": string[] (technical and soft skills),
   "yearsExperience": number,
-  "workRights": string (one of: "Australian Citizen", "Permanent Resident", "Working Holiday Visa", "Student Visa (with work rights)", "Temporary Skilled Visa (482)", "Any right to work"),
+  "workRights": string (one of: "Australian Citizen", "Permanent Resident (PR)", "New Zealand Citizen (Subclass 444)", "Temporary Graduate Visa (Subclass 485)", "Temporary Skill Shortage (Subclass 482)", "Working Holiday (Subclass 417)", "Work and Holiday (Subclass 462)", "Student Visa (Subclass 500) – with work rights", "Partner Visa (Subclass 820/801)", "Bridging Visa A (BVA)", "Seeking Employer Sponsorship", "Any right to work"),
   "location": string (Australian city),
   "state": string (NSW/VIC/QLD/WA/SA/TAS/ACT/NT),
   "experiences": [{ "title": string, "company": string, "startDate": "YYYY-MM-DD", "endDate": "YYYY-MM-DD" | null, "isCurrent": boolean, "description": string }],

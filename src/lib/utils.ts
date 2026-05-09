@@ -62,10 +62,18 @@ export const EXPERIENCE_LEVELS = [
 
 export const WORK_RIGHTS = [
   "Australian Citizen",
-  "Permanent Resident",
-  "Working Holiday Visa",
-  "Student Visa (with work rights)",
-  "Temporary Skilled Visa (482)",
+  "Permanent Resident (PR)",
+  "New Zealand Citizen (Subclass 444)",
+  "Temporary Graduate Visa (Subclass 485)",
+  "Temporary Skill Shortage (Subclass 482)",
+  "Employer Nomination Scheme (Subclass 186)",
+  "Regional Sponsored Migration (Subclass 187)",
+  "Working Holiday (Subclass 417)",
+  "Work and Holiday (Subclass 462)",
+  "Student Visa (Subclass 500) – with work rights",
+  "Partner Visa (Subclass 820/801)",
+  "Bridging Visa A (BVA)",
+  "Seeking Employer Sponsorship",
   "Any right to work",
 ] as const;
 
