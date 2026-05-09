@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -11,12 +11,12 @@ import { useToast } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";
 import {
   AU_STATES,
-  WORK_TYPES,
+  AU_CITIES,
   EMPLOYMENT_TYPES,
-  EXPERIENCE_LEVELS,
   WORK_RIGHTS,
+  cn,
 } from "@/lib/utils";
-import { Loader2, Save, User } from "lucide-react";
+import { Loader2, Save, User, X, ChevronDown, Search } from "lucide-react";
 
 interface ProfileData {
   headline: string;
@@ -29,8 +29,8 @@ interface ProfileData {
   linkedinUrl: string;
   portfolioUrl: string;
   minSalaryAud: string;
-  preferredJobTypes: string;
-  preferredLocations: string;
+  preferredJobTypes: string[];
+  preferredLocations: string[];
 }
 
 export default function ProfilePage() {
@@ -49,9 +49,22 @@ export default function ProfilePage() {
     linkedinUrl: "",
     portfolioUrl: "",
     minSalaryAud: "",
-    preferredJobTypes: "",
-    preferredLocations: "",
+    preferredJobTypes: [],
+    preferredLocations: [],
   });
+  const [locationSearch, setLocationSearch] = useState("");
+  const [locationOpen, setLocationOpen] = useState(false);
+  const locationRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (locationRef.current && !locationRef.current.contains(e.target as Node)) {
+        setLocationOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
 
   const [resumes, setResumes] = useState<
     Array<{ id: string; fileName: string; createdAt: string; isActive: boolean }>
@@ -74,8 +87,8 @@ export default function ProfilePage() {
             linkedinUrl: p.linkedinUrl ?? "",
             portfolioUrl: p.portfolioUrl ?? "",
             minSalaryAud: p.minSalaryAud?.toString() ?? "",
-            preferredJobTypes: p.preferredJobTypes?.join(", ") ?? "",
-            preferredLocations: p.preferredLocations?.join(", ") ?? "",
+            preferredJobTypes: p.preferredJobTypes ?? [],
+            preferredLocations: p.preferredLocations ?? [],
           });
         }
         setResumes(data.resumes ?? []);
@@ -87,7 +100,10 @@ export default function ProfilePage() {
     e.preventDefault();
     setSaving(true);
     const fd = new FormData();
-    Object.entries(form).forEach(([k, v]) => fd.append(k, v));
+    Object.entries(form).forEach(([k, v]) => {
+      if (Array.isArray(v)) fd.append(k, v.join(","));
+      else fd.append(k, v);
+    });
 
     const res = await fetch("/api/profile", { method: "POST", body: fd });
     const data = await res.json();
@@ -224,16 +240,115 @@ export default function ProfilePage() {
 
             <div className="pt-2 border-t border-gray-100 space-y-4">
               <p className="text-sm font-medium text-gray-700">Job preferences</p>
-              <Input
-                label="Preferred employment types (comma-separated)"
-                placeholder="e.g. full-time, contract"
-                {...field("preferredJobTypes")}
-              />
-              <Input
-                label="Preferred locations (comma-separated)"
-                placeholder="e.g. Sydney, Remote, Melbourne"
-                {...field("preferredLocations")}
-              />
+
+              {/* Employment type multi-select */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-gray-700">Preferred employment types</label>
+                <div className="flex flex-wrap gap-2">
+                  {EMPLOYMENT_TYPES.map((type) => {
+                    const selected = form.preferredJobTypes.includes(type.value);
+                    return (
+                      <button
+                        key={type.value}
+                        type="button"
+                        onClick={() =>
+                          setForm((f) => ({
+                            ...f,
+                            preferredJobTypes: selected
+                              ? f.preferredJobTypes.filter((t) => t !== type.value)
+                              : [...f.preferredJobTypes, type.value],
+                          }))
+                        }
+                        className={cn(
+                          "px-3 py-1.5 rounded-full text-sm font-medium border transition-all",
+                          selected
+                            ? "bg-teal-600 text-white border-teal-600"
+                            : "bg-white text-gray-600 border-gray-300 hover:border-teal-400 hover:text-teal-600"
+                        )}
+                      >
+                        {type.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Location searchable multi-select */}
+              <div className="space-y-1.5" ref={locationRef}>
+                <label className="text-sm font-medium text-gray-700">Preferred locations</label>
+                {/* Selected tags */}
+                {form.preferredLocations.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-1">
+                    {form.preferredLocations.map((loc) => (
+                      <span
+                        key={loc}
+                        className="flex items-center gap-1 bg-teal-50 text-teal-700 border border-teal-200 rounded-full px-2.5 py-0.5 text-sm"
+                      >
+                        {loc}
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setForm((f) => ({
+                              ...f,
+                              preferredLocations: f.preferredLocations.filter((l) => l !== loc),
+                            }))
+                          }
+                          className="hover:text-teal-900"
+                        >
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                {/* Search input */}
+                <div className="relative">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  <input
+                    type="text"
+                    value={locationSearch}
+                    onChange={(e) => { setLocationSearch(e.target.value); setLocationOpen(true); }}
+                    onFocus={() => setLocationOpen(true)}
+                    placeholder="Search Australian cities…"
+                    className="w-full pl-8 pr-8 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  />
+                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                  {locationOpen && (
+                    <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
+                      {AU_CITIES
+                        .filter(
+                          (c) =>
+                            c.toLowerCase().includes(locationSearch.toLowerCase()) &&
+                            !form.preferredLocations.includes(c)
+                        )
+                        .map((city) => (
+                          <button
+                            key={city}
+                            type="button"
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setForm((f) => ({
+                                ...f,
+                                preferredLocations: [...f.preferredLocations, city],
+                              }));
+                              setLocationSearch("");
+                            }}
+                            className="w-full text-left px-3 py-2 text-sm hover:bg-teal-50 hover:text-teal-700 transition-colors"
+                          >
+                            {city}
+                          </button>
+                        ))}
+                      {AU_CITIES.filter(
+                        (c) =>
+                          c.toLowerCase().includes(locationSearch.toLowerCase()) &&
+                          !form.preferredLocations.includes(c)
+                      ).length === 0 && (
+                        <p className="px-3 py-2 text-sm text-gray-400">No results</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-end pt-2">

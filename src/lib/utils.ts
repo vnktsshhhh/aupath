@@ -69,6 +69,17 @@ export const WORK_RIGHTS = [
   "Any right to work",
 ] as const;
 
+export const AU_CITIES = [
+  "Sydney", "Melbourne", "Brisbane", "Perth", "Adelaide", "Canberra", "Darwin", "Hobart",
+  "Gold Coast", "Newcastle", "Wollongong", "Sunshine Coast", "Geelong", "Townsville",
+  "Cairns", "Toowoomba", "Ballarat", "Bendigo", "Albury–Wodonga", "Launceston",
+  "Mackay", "Rockhampton", "Bunbury", "Bundaberg", "Coffs Harbour", "Wagga Wagga",
+  "Hervey Bay", "Mildura", "Shepparton", "Gladstone", "Port Macquarie", "Tamworth",
+  "Orange", "Dubbo", "Bowral", "Parramatta", "Penrith", "Liverpool", "Bankstown",
+  "Manly", "Bondi", "Chatswood", "Cronulla", "Paramatta",
+  "Remote", "Hybrid – Sydney", "Hybrid – Melbourne", "Hybrid – Brisbane",
+] as const;
+
 export const KANBAN_COLUMNS = [
   { id: "wishlist", label: "Wishlist", color: "bg-gray-100" },
   { id: "applied", label: "Applied", color: "bg-blue-100" },
